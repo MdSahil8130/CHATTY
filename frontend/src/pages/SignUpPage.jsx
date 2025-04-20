@@ -1,17 +1,16 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { MessageSquare } from "lucide-react";
-import { User } from "lucide-react";
-import { Eye, EyeOff } from "lucide-react";
-import { Mail } from "lucide-react";
-import { Lock } from "lucide-react";
-import { Loader2 } from "lucide-react";
+import {
+  MessageSquare,
+  User,
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  Loader2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import AuthImagePattern from "../components/AuthImagePattern";
-
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const SignUpPage = () => {
@@ -25,49 +24,48 @@ const SignUpPage = () => {
   const { signup, isSigningUp } = useAuthStore();
 
   const validateForm = () => {
-    if(!formData.fullName.trim()) {
+    if (!formData.fullName.trim()) {
       return toast.error("Full Name is required");
     }
-    if(!formData.email.trim()) {
+    if (!formData.email.trim()) {
       return toast.error("Email is required");
     }
-    if(!/\S+@\S+\.\S+/.test(formData.email)) {
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
       return toast.error("Email is invalid");
     }
-    if(!formData.password.trim()) {
+    if (!formData.password.trim()) {
       return toast.error("Password is required");
     }
 
-    if(formData.password.length < 6) {
+    if (formData.password.length < 6) {
       return toast.error("Password must be at least 6 characters long");
     }
     return true;
-
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const success = validateForm();
-    if(success==true){
+    if (success === true) {
       signup(formData);
     }
   };
 
   return (
-    <div className="min-h screen grid lg:grid-cols-2">
+    <div className="min-h-screen grid lg:grid-cols-2 bg-gray-950 text-gray-100">
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
               <div
-                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
-              group-hover:bg-primary/20 transition-colors"
+                className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center 
+              group-hover:bg-indigo-500/20 transition-colors"
               >
-                <MessageSquare className="size-6 text-primary" />
+                <MessageSquare className="w-6 h-6 text-indigo-500" />
               </div>
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
-              <p className="text-base-content/60">
+              <p className="text-gray-400">
                 Get started with your free account
               </p>
             </div>
@@ -75,16 +73,16 @@ const SignUpPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Full Name</span>
+              <label className="block text-sm font-medium mb-2">
+                Full Name
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="size-5 text-base-content/40" />
+                  <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="text"
-                  className={`input input-bordered w-full pl-10`}
+                  className="w-full bg-gray-900 border border-gray-800 rounded-md py-2.5 pl-10 pr-4 text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 focus:outline-none"
                   placeholder="John Doe"
                   value={formData.fullName}
                   onChange={(e) =>
@@ -95,16 +93,14 @@ const SignUpPage = () => {
             </div>
 
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Email</span>
-              </label>
+              <label className="block text-sm font-medium mb-2">Email</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="size-5 text-base-content/40" />
+                  <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="email"
-                  className={`input input-bordered w-full pl-10`}
+                  className="w-full bg-gray-900 border border-gray-800 rounded-md py-2.5 pl-10 pr-4 text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 focus:outline-none"
                   placeholder="you@example.com"
                   value={formData.email}
                   onChange={(e) =>
@@ -115,16 +111,14 @@ const SignUpPage = () => {
             </div>
 
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Password</span>
-              </label>
+              <label className="block text-sm font-medium mb-2">Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="size-5 text-base-content/40" />
+                  <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  className={`input input-bordered w-full pl-10 pr-10`}
+                  className="w-full bg-gray-900 border border-gray-800 rounded-md py-2.5 pl-10 pr-10 text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 focus:outline-none"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) =>
@@ -133,13 +127,13 @@ const SignUpPage = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center z-10"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="size-5 text-base-content/40" />
+                    <EyeOff className="h-5 w-5 text-gray-400" />
                   ) : (
-                    <Eye className="size-5 text-base-content/40" />
+                    <Eye className="h-5 w-5 text-gray-400" />
                   )}
                 </button>
               </div>
@@ -147,14 +141,14 @@ const SignUpPage = () => {
 
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-70"
               disabled={isSigningUp}
             >
               {isSigningUp ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
+                <div className="flex items-center justify-center gap-2">
+                  <Loader2 className="h-5 w-5 animate-spin" />
                   Loading...
-                </>
+                </div>
               ) : (
                 "Create Account"
               )}
@@ -162,21 +156,24 @@ const SignUpPage = () => {
           </form>
 
           <div className="text-center">
-            <p className="text-base-content/60">
+            <p className="text-gray-400">
               Already have an account?{" "}
-              <Link to="/login" className="link link-primary">
+              <Link
+                to="/login"
+                className="text-indigo-500 hover:text-indigo-400"
+              >
                 Sign in
               </Link>
             </p>
           </div>
         </div>
       </div>
-      {/* right side */}
-              <AuthImagePattern
-                title="Join our community"
-                subtitle ="Connect with like-minded individuals and share your ideas."
-              />
 
+      {/* Right side */}
+      <AuthImagePattern
+        title="Join our community"
+        subtitle="Connect with like-minded individuals and share your ideas."
+      />
     </div>
   );
 };
