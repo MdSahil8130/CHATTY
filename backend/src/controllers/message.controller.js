@@ -25,8 +25,8 @@ export const getMessages = async (req, res) => {
 
     const messages = await Message.find({
       $or: [
-        { senderId: myId, recieverId: userToChatId },
-        { senderId: userToChatId, recieverId: myId },
+        { senderId: myId, receiverId: userToChatId },
+        { senderId: userToChatId, receiverId: myId },
       ],
     });
 
@@ -38,7 +38,7 @@ export const getMessages = async (req, res) => {
     });
   }
 };
-
+ 
 export const sendMessage = async (req, res) => {
   try {
     const { text, image } = req.body;
@@ -50,7 +50,9 @@ export const sendMessage = async (req, res) => {
     }
 
     if (!text && !image) {
-      return res.status(400).json({ message: "Message must contain text or image" });
+      return res
+        .status(400)
+        .json({ message: "Message must contain text or image" });
     }
 
     let imageUrl;
@@ -79,4 +81,3 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ message: "Internal server error messages" });
   }
 };
-
