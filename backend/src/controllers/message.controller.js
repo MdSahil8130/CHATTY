@@ -1,5 +1,7 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
+import mongoose from "mongoose";
+import cloudinary from "../lib/cloudinary.js";
 export const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUser = req.user._id;
@@ -37,35 +39,44 @@ export const getMessages = async (req, res) => {
   }
 };
 
-export const sendMessage = async (req,res)=>{
-    try{
-        const {text,image} = req.body;
-        const {id : recieverId} = req.params;
-        const senderId = req.user._id;
+export const sendMessage = async (req, res) => {
+  try {
+    const { text, image } = req.body;
+    const { id: receiverId } = req.params;
+    const senderId = req.user._id;
 
-        let imageUrl;
-        if(image){
-            const uploadResponse = await cloudinary.uploader.upload(image);
-            imageUrl = uploadResponse.secure_url;
-        }
-
-        const newMessage = new Message({
-            senderId,
-            recieverId,
-            text,
-            image:imageUrl
-        })
-
-        const savedMessage = await newMessage.save();
-
-        // todo : realtime functionality
-
-        res.status(200).json(savedMessage);
-
-    }catch(err){
-        console.log("Error in sendMessage",err);
-        res.status(500).json({
-            message:"Internal server error"
-        })
+    if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+      return res.status(400).json({ message: "Invalid receiver ID" });
     }
-}
+
+    if (!text && !image) {
+      return res.status(400).json({ message: "Message must contain text or image" });
+    }
+
+    let imageUrl;
+    if (image) {
+      try {
+        const uploadResponse = await cloudinary.uploader.upload(image);
+        imageUrl = uploadResponse.secure_url;
+      } catch (uploadError) {
+        console.error("Cloudinary upload error:", uploadError);
+        return res.status(500).json({ message: "Image upload failed" });
+      }
+    }
+
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      text,
+      image: imageUrl,
+    });
+
+    const savedMessage = await newMessage.save();
+
+    res.status(200).json(savedMessage);
+  } catch (err) {
+    console.error("Error in sendMessage", err);
+    res.status(500).json({ message: "Internal server error messages" });
+  }
+};
+

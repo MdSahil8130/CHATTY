@@ -9,7 +9,8 @@ import cors from "cors";
 dotnenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // ⬅ Increase limit
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
@@ -19,7 +20,7 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
